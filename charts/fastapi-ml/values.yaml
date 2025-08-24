@@ -1,0 +1,12 @@
+replicaCount: 1
+
+image:
+  repository: 192.168.0.210:5000/fastapi-ml-app
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+
+resources: {}
