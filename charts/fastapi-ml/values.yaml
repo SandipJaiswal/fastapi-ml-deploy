@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: 192.168.0.210:5000/fastapi-ml-app
+  repository: 192.168.0.200:5000/fastapi-ml-app
   tag: "latest"
   pullPolicy: IfNotPresent
 
