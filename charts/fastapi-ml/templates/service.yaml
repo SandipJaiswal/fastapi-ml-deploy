@@ -8,4 +8,4 @@ spec:
     app: fastapi-ml
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: 80
+      targetPort: 8000

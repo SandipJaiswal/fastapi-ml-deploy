@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: fastapi-ml
+  labels:
+    app: fastapi-ml
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -15,5 +17,58 @@ spec:
       containers:
       - name: fastapi-ml
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: 80
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+        
+        # Environment variables
+        {{- if .Values.env }}
+        env:
+        {{- range .Values.env }}
+        - name: {{ .name }}
+          value: {{ .value | quote }}
+        {{- end }}
+        {{- end }}
+        
+        # Resource limits and requests
+        {{- if .Values.resources }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        {{- end }}
+        
+        # Liveness probe
+        {{- if .Values.livenessProbe }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.livenessProbe.httpGet.path }}
+            port: {{ .Values.livenessProbe.httpGet.port }}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 5 }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold | default 1 }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 3 }}
+        {{- end }}
+        
+        # Readiness probe
+        {{- if .Values.readinessProbe }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.readinessProbe.httpGet.path }}
+            port: {{ .Values.readinessProbe.httpGet.port }}
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 5 }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold | default 1 }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 3 }}
+        {{- end }}
+      
+      # Security context
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      
+      # Restart policy
+      restartPolicy: Always

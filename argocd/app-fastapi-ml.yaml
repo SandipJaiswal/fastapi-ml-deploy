@@ -5,7 +5,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/<your-username>/fastapi-ml-deploy.git
+    repoURL: https://github.com/SandipJaiswal/fastapi-ml-deploy.git
     targetRevision: main
     path: charts/fastapi-ml
   destination:
@@ -15,3 +15,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+    - CreateNamespace=true 
