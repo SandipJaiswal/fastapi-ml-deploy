@@ -8,7 +8,7 @@ image:
 service:
   type: LoadBalancer
   port: 8080           # External port (what users connect to)
-  targetPort: 8000   # Internal container port
+  targetPort: 8080   # Internal container port
   # If LoadBalancer doesn't work, try NodePort:
   # type: NodePort
   # nodePort: 30080
@@ -25,7 +25,7 @@ resources:
 livenessProbe:
   httpGet:
     path: /health
-    port: 8000
+    port: 8080
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
@@ -35,7 +35,7 @@ livenessProbe:
 readinessProbe:
   httpGet:
     path: /ready
-    port: 8000
+    port: 8080
   initialDelaySeconds: 5
   periodSeconds: 5
   timeoutSeconds: 5
@@ -46,7 +46,7 @@ readinessProbe:
 startupProbe:
   httpGet:
     path: /health
-    port: 8000
+    port: 8080
   initialDelaySeconds: 10
   periodSeconds: 10
   timeoutSeconds: 5
