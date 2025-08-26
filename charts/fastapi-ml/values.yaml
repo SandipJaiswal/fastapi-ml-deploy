@@ -1,18 +1,15 @@
 replicaCount: 2
-
 image:
   repository: 192.168.0.200:5000/fastapi-ml-app
-  tag: "latest"  # This will be updated by CI pipeline
+  tag: "20250826-105611-a6296f9" # This will be updated by CI pipeline
   pullPolicy: Always
-
 service:
   type: LoadBalancer
-  port: 8080           # External port (what users connect to)
-  targetPort: 8080   # Internal container port
+  port: 8080 # External port (what users connect to)
+  targetPort: 8080 # Internal container port
   # If LoadBalancer doesn't work, try NodePort:
   # type: NodePort
   # nodePort: 30080
-
 resources:
   limits:
     cpu: 500m
@@ -20,7 +17,6 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
-
 # Health checks for Kubernetes
 livenessProbe:
   httpGet:
@@ -31,7 +27,6 @@ livenessProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 3
-
 readinessProbe:
   httpGet:
     path: /ready
@@ -41,7 +36,6 @@ readinessProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 3
-
 # Startup probe (for slow-starting containers)
 startupProbe:
   httpGet:
@@ -51,20 +45,17 @@ startupProbe:
   periodSeconds: 10
   timeoutSeconds: 5
   successThreshold: 1
-  failureThreshold: 30  # Allow 5 minutes for startup
-
+  failureThreshold: 30 # Allow 5 minutes for startup
 # Environment variables
 env:
   - name: ENVIRONMENT
     value: "production"
   - name: LOG_LEVEL
     value: "INFO"
-
 # Pod disruption budget
 podDisruptionBudget:
   enabled: true
   minAvailable: 1
-
 # Horizontal Pod Autoscaler
 autoscaling:
   enabled: false
@@ -72,41 +63,35 @@ autoscaling:
   maxReplicas: 10
   targetCPUUtilizationPercentage: 70
   targetMemoryUtilizationPercentage: 80
-
 # Ingress configuration (optional)
 ingress:
   enabled: false
   className: ""
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  # kubernetes.io/ingress.class: nginx
+  # cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
     - host: fastapi-ml.local
       paths:
         - path: /
           pathType: Prefix
   tls: []
-    # - secretName: fastapi-ml-tls
-    #   hosts:
-    #     - fastapi-ml.local
-
+  # - secretName: fastapi-ml-tls
+  #   hosts:
+  #     - fastapi-ml.local
 # Service account
 serviceAccount:
   create: true
   name: ""
   annotations: {}
-
 # Security context
 securityContext:
   runAsNonRoot: true
   runAsUser: 1000
   fsGroup: 1000
-
 # Node selector
 nodeSelector: {}
-
 # Tolerations
 tolerations: []
-
 # Affinity
 affinity: {}
