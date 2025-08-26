@@ -1,7 +1,7 @@
 replicaCount: 2
 image:
   repository: 192.168.0.200:5000/fastapi-ml-app
-  tag: "20250826-105611-a6296f9" # This will be updated by CI pipeline
+  tag: "20250826-112428-6673f13" # This will be updated by CI pipeline
   pullPolicy: Always
 service:
   type: LoadBalancer
